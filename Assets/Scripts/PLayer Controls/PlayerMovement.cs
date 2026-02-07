@@ -27,13 +27,19 @@ public class PlayerMovement : MonoBehaviour
     public LayerMask whatIsGround;
     bool isGrounded;
 
-    public Transform orientation;
+    [Header("Slope handling")]
+    public float maxSlopeAngle;
+    public RaycastHit slopeHit;
 
+    [Header("wall running")]
+    public bool isWallrunning;
+    public float wallRunSpeed;
+
+    [Header("other")]
+    public Transform orientation;
     float horizontalInput;
     float verticalInput;
-
     Vector3 moveDirection;
-
     Rigidbody playerRB;
 
     private void Start()
@@ -101,6 +107,40 @@ public class PlayerMovement : MonoBehaviour
             playerRB.AddForce(moveDirection.normalized * moveSpeed * 10f * airMultiplier, ForceMode.Force);
         }
 
+        //changes angle of force to make slop movement feel smoother
+        if (OnSlope())
+        {
+            playerRB.AddForce(GetSlopeMoveDirection(moveDirection) * moveSpeed * 20f, ForceMode.Force);
+            playerRB.AddForce(Vector3.down * 80f, ForceMode.Force);
+            
+        }
+
+        if (!isWallrunning)
+        {
+            //stops the player sliding down on slopes
+            playerRB.useGravity = !OnSlope();
+        }
+       
+        if (isWallrunning == true)
+        {
+            wallRunSpeed = moveSpeed;
+        }
+    }
+
+    //checks if the player is on a slope
+    public bool OnSlope()
+    {
+        if(Physics.Raycast(transform.position, Vector3.down, out slopeHit, playerHeight * 0.5f + 0.3f))
+        {
+            float angle = Vector3.Angle(Vector3.up, slopeHit.normal);
+            return angle < maxSlopeAngle && angle !=0;
+        }
+        return false;
+    }
+
+    public Vector3 GetSlopeMoveDirection(Vector3 direction)
+    {
+        return Vector3.ProjectOnPlane(direction, slopeHit.normal).normalized;
     }
 
 
