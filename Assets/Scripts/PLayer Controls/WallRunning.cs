@@ -37,10 +37,21 @@ public class WallRunning : MonoBehaviour
     private Rigidbody playerRB;
     public PlayerCamera playerCamera;
 
-    private void Start()
+    [Header("misc")]
+    Camera cam;
+    private float baseFieldOfView;
+
+    private void Awake()
     {
         playerRB = GetComponent<Rigidbody>();
         playerMovement = GetComponent<PlayerMovement>();
+        cam = Camera.main;
+    }
+
+    private void Start()
+    {
+        baseFieldOfView = cam.fieldOfView;
+        Debug.Log(baseFieldOfView);
     }
 
     private void Update()
@@ -125,7 +136,7 @@ public class WallRunning : MonoBehaviour
         playerRB.linearVelocity = new Vector3(playerRB.linearVelocity.x, 0, playerRB.linearVelocity.z);
 
         //apply camera affects
-        playerCamera.SetFOV(70f);
+        playerCamera.SetFOV(baseFieldOfView + 5f);
         if (wallLeft)
         {
             playerCamera.cameraTilt(-10f);
@@ -172,7 +183,7 @@ public class WallRunning : MonoBehaviour
         playerMovement.isWallrunning = false;
 
         //apply camera affects
-        playerCamera.SetFOV(60f);
+        playerCamera.SetFOV(baseFieldOfView);
         playerCamera.cameraTilt(0f);
 
     }
