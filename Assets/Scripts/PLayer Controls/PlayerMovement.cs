@@ -35,6 +35,9 @@ public class PlayerMovement : MonoBehaviour
     public bool isWallrunning;
     public float wallRunSpeed;
 
+    [Header("Dashing")]
+    public bool isDashing;
+
     [Header("other")]
     public Transform orientation;
     float horizontalInput;
@@ -60,7 +63,7 @@ public class PlayerMovement : MonoBehaviour
         SpeedCheck();
 
         //handle drag
-        if (isGrounded == true )
+        if (isGrounded == true && !isDashing)
         {
             playerRB.linearDamping = groundDrag;
         }
