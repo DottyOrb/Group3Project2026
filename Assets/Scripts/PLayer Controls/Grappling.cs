@@ -50,29 +50,31 @@ public class Grappling : MonoBehaviour
     {
         if (joint != null) return;
 
+        Camera cam = playerCamera.GetComponent<Camera>();
+
+        //in the event of the camera being a bit off centre figures out the true centre of the screen for easier aiming.
+        Ray ray = cam.ScreenPointToRay(new Vector3(Screen.width / 2f, Screen.height / 2f));
+
         RaycastHit sphereCastHit;
 
-        Physics.SphereCast(playerCamera.position, predictionSphereCastRadius, playerCamera.forward, out sphereCastHit, maxDistance, grappleable);
+        bool sphereHit = Physics.SphereCast(playerCamera.position, predictionSphereCastRadius, playerCamera.forward, out sphereCastHit, maxDistance, grappleable);
 
         RaycastHit raycastHit;
-        Physics.Raycast(playerCamera.position, playerCamera.forward, out raycastHit, maxDistance, grappleable);
+        bool rayHit = Physics.Raycast(ray, out raycastHit, maxDistance, grappleable);
 
-        Vector3 realHitPoint;
 
-        if (raycastHit.point != Vector3.zero)
+        if (rayHit)
         {
-            realHitPoint = raycastHit.point;
+            predictionHit = raycastHit;
         }
-        else if (sphereCastHit.point != Vector3.zero)
+        else if (sphereHit)
         {
-            realHitPoint = sphereCastHit.point;
+            predictionHit = sphereCastHit;
         }
         else
         {
-            realHitPoint = Vector3.zero;
+            predictionHit = new RaycastHit();
         }
-
-        predictionHit = raycastHit.point == Vector3.zero ? sphereCastHit : raycastHit;
     }
 
     void StartGrapple()
