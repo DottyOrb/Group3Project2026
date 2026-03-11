@@ -5,8 +5,7 @@ using static UnityEngine.GraphicsBuffer;
 
 public class EnemyBase : MonoBehaviour
 {
-    //[SerializeField] private float enemySpeed = 3.0f;
-    //[SerializeField] private int enemyHealth = 3;
+    [SerializeField] protected float enemySpeed = 4.0f;
     [SerializeField] private GameObject player;
     private NavMeshAgent agent;
     /*public enum EnemyActions
@@ -32,17 +31,16 @@ public class EnemyBase : MonoBehaviour
             case EnemyActions.Death:
                 break;
         }*/
+        GetComponent<NavMeshAgent>().speed = enemySpeed;
         agent.SetDestination(player.transform.position);
     }
-    /*private void OnTriggerEnter(Collider otherObject)
+
+    public float GetEnemySpeed() 
     {
-        if (otherObject.gameObject.layer == LayerMask.NameToLayer("Bullet"))
-        {
-            enemyHealth--;
-            if (enemyHealth <= 0)
-            {
-                Destroy(gameObject);
-            }
-        }
-    }*/
+        return enemySpeed;
+    }
+    public void SetEnemySpeed(float speed) 
+    { 
+        enemySpeed = speed;
+    }
 }
