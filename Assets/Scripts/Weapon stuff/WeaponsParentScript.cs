@@ -14,7 +14,7 @@ namespace Weapons
         public bool hasAbility;
         public bool isFullAuto;
         public KeyCode fireKey = KeyCode.Mouse0;
-        public KeyCode abilityKey = KeyCode.Q;
+        public KeyCode abilityKey = KeyCode.F;
         public Camera cam;
         public GameObject impactAffect;
 
