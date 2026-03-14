@@ -44,13 +44,14 @@ public class PlayerMovement : MonoBehaviour
     float verticalInput;
     Vector3 moveDirection;
     Rigidbody playerRB;
+    HP playerHP;
 
     private void Start()
     {
         playerRB = GetComponent<Rigidbody>();
         playerRB.freezeRotation = true;
         canJump = true;
-       
+        playerHP = GetComponent<HP>();
     }
 
     private void Update()
@@ -150,15 +151,16 @@ public class PlayerMovement : MonoBehaviour
     private void SpeedCheck()
     {
         //calculates players velocity can use this to scale healing later
-        Vector3 flatvel = new Vector3(playerRB.linearVelocity.x, 0f, playerRB.linearVelocity.y);
+        Vector3 flatvel = new Vector3(playerRB.linearVelocity.x, 0f, playerRB.linearVelocity.z);
 
-        //if our cu7rrent velocity is greater than our maximum velocity the speed is brought down too the max velocity
+        float speed = flatvel.magnitude;
 
-        //if(flatvel.magnitude > maxVelocity)
-        //{
-        //    Vector3 limitedVel = flatvel.normalized * maxVelocity;
-        //    playerRB.linearVelocity = new Vector3(limitedVel.x, playerRB.linearVelocity.y, limitedVel.z);
-        //}
+        if (speed > 3f && playerHP.CanHeal())
+        {
+            float healAmount = speed / 10 * Time.deltaTime;
+
+            playerHP.Heal(healAmount);
+        }
     }
 
 
