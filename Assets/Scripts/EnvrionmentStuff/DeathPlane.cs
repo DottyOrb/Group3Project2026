@@ -14,16 +14,12 @@ public class DeathPlane : MonoBehaviour
             return;
         }
 
-        if(hp.isPlayer == true)
+        if (hp.isPlayer == true)
         {
             Debug.Log("Hi mark");
 
             //damage the player for 25 HP
             hp.TakeDamage(10);
-
-            //return the player to the return position
-            Transform root = other.transform.root;
-            root.position = playerReturnPoint.position;
 
             //reset players velocity
             Rigidbody rb = hp.GetComponent<Rigidbody>();
@@ -46,6 +42,7 @@ public class DeathPlane : MonoBehaviour
                 other.transform.root.position = playerReturnPoint.position;
             }
         }
+
         else
         {
             hp.TakeDamage(9999f);
