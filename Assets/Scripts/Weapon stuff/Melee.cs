@@ -18,7 +18,7 @@ public class Melee : WeaponsParentScript
 
         damage = 5f;
         range = 5f;
-        shotKnockBack = 0f;
+        shotKnockBack = 10f;
         rateOfFire = 1f;
         isFullAuto = true;
 
