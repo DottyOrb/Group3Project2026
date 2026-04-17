@@ -3,7 +3,7 @@ using UnityEngine;
 
 public class PlayerMovement : MonoBehaviour
 {
-    //handles all the player movement stuff
+    //handles all the core player movement stuff
 
     //being lazy and making everything public for now so I can edit values in the editor, headers to make it more readable in editor
 
