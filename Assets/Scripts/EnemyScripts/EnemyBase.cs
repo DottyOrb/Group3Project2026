@@ -6,8 +6,9 @@ using static UnityEngine.GraphicsBuffer;
 public class EnemyBase : MonoBehaviour
 {
     [SerializeField] protected float enemySpeed = 4.0f;
-    [SerializeField] private GameObject player;
+    [SerializeField] public GameObject player;
     private NavMeshAgent agent;
+    
     /*public enum EnemyActions
     {
         Moving,
@@ -15,32 +16,19 @@ public class EnemyBase : MonoBehaviour
         Death
     }
     public EnemyActions enemyActions;*/
-    private void Start()
+    protected virtual void Start()
     {
         agent = GetComponent<NavMeshAgent>();
         player = GameObject.FindWithTag("Player");
-    }
-    private void Update()
-    {
-        /*switch (enemyActions)
-        {
-            case EnemyActions.Moving://moves towards the player to try to get to the correct range to attack
-                break;
-            case EnemyActions.Attacking://attacks the player
-                break;
-            case EnemyActions.Death:
-                break;
-        }*/
-        GetComponent<NavMeshAgent>().speed = enemySpeed;
-        agent.SetDestination(player.transform.position);
-    }
+        agent.speed = enemySpeed;
 
-    public float GetEnemySpeed() 
-    {
-        return enemySpeed;
     }
-    public void SetEnemySpeed(float speed) 
-    { 
-        enemySpeed = speed;
+    protected virtual void Update()
+    {
+        EnemyMove();
+    }
+    protected virtual void EnemyMove() 
+    {
+        agent.SetDestination(player.transform.position);
     }
 }
