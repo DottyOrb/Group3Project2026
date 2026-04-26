@@ -1,9 +1,10 @@
+using System.Collections;
 using UnityEngine;
 using static UnityEditor.PlayerSettings;
 
 public enum patrolStates
 {
-    Patrol, Chase
+    Patrol, Chase, Melee
 }
 public class EnemyManager : MonoBehaviour
 {
@@ -16,6 +17,9 @@ public class EnemyManager : MonoBehaviour
     private patrolStates state;
     private EnemyController enemyScript;
     private EnemySight SightScript;
+    private EnemyMelee enemyMeleeScript;
+    public bool isMeleeing;
+    public Animator animator;
 
     //I need some way to differentiate what area each enemy is in, so it can only target the points near it.
     //alternatively I could instead have each enemy patrol randomly between the points in a certain range.
@@ -26,54 +30,83 @@ public class EnemyManager : MonoBehaviour
         IsPatrolPoint1 = true;
         enemyScript = enemy.GetComponent<EnemyController>();
         SightScript = eyes.GetComponent<EnemySight>();
+        enemyMeleeScript = enemy.GetComponent<EnemyMelee>();
     }
 
     
     void Update()
     {
-        float dist = Vector3.Distance(player.transform.position, enemy.transform.position);//calculates distance between player and enemy
-        switch (state)
+        if (enemy != null)
         {
-            case patrolStates.Patrol:
-                if (dist <= 5)
-                {
-                    state = patrolStates.Chase;//switches into chase mode when the player is close enough
-                    Debug.Log("heard chasing");
-                }
-                else
-                {
-                    float patrolPoint1Dist = Vector3.Distance(enemy.transform.position, PatrolPoint1.transform.position);//finds the distance between enemy and point 1
-                    float patrolPoint2Dist = Vector3.Distance(enemy.transform.position, PatrolPoint2.transform.position);//finds the distance between enemy and point 2
-                    IsPatrolPoint1 = checkCurrentPatrolNode(patrolPoint1Dist, patrolPoint2Dist);//sets the bool to true or false based on which is closer
-                    if (IsPatrolPoint1)
+            float dist = Vector3.Distance(player.transform.position, enemy.transform.position);//calculates distance between player and enemy
+            switch (state)
+            {
+                case patrolStates.Patrol:
+                    if (dist <= 5)
                     {
-                        enemyScript.target = PatrolPoint1.transform;
-                        setLookAt(PatrolPoint1.transform.position);
+                        state = patrolStates.Chase;//switches into chase mode when the player is close enough
                     }
                     else
                     {
-                        enemyScript.target = PatrolPoint2.transform;
-                        setLookAt(PatrolPoint2.transform.position);
+                        float patrolPoint1Dist = Vector3.Distance(enemy.transform.position, PatrolPoint1.transform.position);//finds the distance between enemy and point 1
+                        float patrolPoint2Dist = Vector3.Distance(enemy.transform.position, PatrolPoint2.transform.position);//finds the distance between enemy and point 2
+                        IsPatrolPoint1 = checkCurrentPatrolNode(patrolPoint1Dist, patrolPoint2Dist);//sets the bool to true or false based on which is closer
+                        if (IsPatrolPoint1)
+                        {
+                            enemyScript.target = PatrolPoint1.transform;
+                            setLookAt(PatrolPoint1.transform.position);
+                        }
+                        else
+                        {
+                            enemyScript.target = PatrolPoint2.transform;
+                            setLookAt(PatrolPoint2.transform.position);
+                        }
+                        state = SightScript.SetChase();
                     }
-                    state = SightScript.SetChase();
-                }
-                break;
-            case patrolStates.Chase:
-                if (dist > 5)//if the player gets far enough away then stops the enemy from chasing the player
-                {
-                    state = SightScript.SetChase();
-                    enemyScript.target = player.transform;
-                    setLookAt(player.transform.position);
-                    //state = patrolStates.Patrol;
-                }
-                else
-                {
-                    enemyScript.target = player.transform;
-                    setLookAt(player.transform.position);
-                }
-                break;
-            default:
-                break;
+                    break;
+                case patrolStates.Chase:
+                    if (dist > 5)//if the player gets far enough away then stops the enemy from chasing the player
+                    {
+                        state = SightScript.SetChase();
+                        enemyScript.target = player.transform;
+                        setLookAt(player.transform.position);
+                        //state = patrolStates.Patrol;
+                    }
+                    else if (dist < 5 && dist > 2)
+                    {
+                        enemyScript.target = player.transform;
+                        setLookAt(player.transform.position);
+                    }
+                    else
+                    {
+                        state = patrolStates.Melee;
+                    }
+                    break;
+                case patrolStates.Melee:
+                    if (dist > 2)
+                    {
+                        state = patrolStates.Chase;
+                    }
+                    else if (dist <= 2 && isMeleeing == false)
+                    {
+                        animator.SetBool("isAttacking", true);
+                        isMeleeing = true;
+                        enemyMeleeScript.meleeAttack(2.5f);
+                        StartCoroutine(resetMelee());
+                    }
+                    break;
+                default:
+                    break;
+            }
+        }
+    }
+    private IEnumerator resetMelee() 
+    {
+        if (enemy != null)
+        {
+            yield return new WaitForSeconds(1);
+            animator.SetBool("isAttacking", false);
+            isMeleeing = false;
         }
     }
     void setLookAt(Vector3 target)

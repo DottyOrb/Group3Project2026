@@ -8,7 +8,7 @@ public class Melee : WeaponsParentScript
     public RectTransform fistUI;
     float punchDistance = 90f;
     float punchOffset = 40f;
-    float punchSpeed = 500f;
+    float punchSpeed = 250f;
     private Vector3 originalPos;
     private bool isPunching = false;
 
@@ -19,7 +19,7 @@ public class Melee : WeaponsParentScript
         damage = 5f;
         range = 5f;
         shotKnockBack = 10f;
-        rateOfFire = 1f;
+        rateOfFire = 0.5f;
         isFullAuto = true;
 
         if (fistUI != null )

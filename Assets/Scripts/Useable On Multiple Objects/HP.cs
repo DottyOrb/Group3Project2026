@@ -1,11 +1,16 @@
 using UnityEngine;
+using UnityEngine.SceneManagement;
 
 public class HP : MonoBehaviour
 {
+    
+    
     [Header("HP")]
     private float maxHealth;
     public float health;
     public bool isPlayer;
+    //[SerializeField] public GameObject HPBar;
+    public HealthBar healthBar;
 
     [Header("regen")]
     float regenDelay = 2f;
@@ -14,6 +19,7 @@ public class HP : MonoBehaviour
     private void Start()
     {
         maxHealth = health;
+        healthBar.setMaxHealth(maxHealth);
     }
 
 
@@ -23,7 +29,7 @@ public class HP : MonoBehaviour
         if (isPlayer || CanHeal())
         {
             health += healAmount;
-
+            healthBar.updateBar(health);
             if (health > maxHealth)
                 health = maxHealth;
         }
@@ -32,6 +38,7 @@ public class HP : MonoBehaviour
     public void TakeDamage(float damage)
     {
         health -= damage;
+        healthBar.updateBar(health);
         //gets the ingame time the player recieved damage
         timeWasDamaged = Time.time;
 
@@ -53,9 +60,9 @@ public class HP : MonoBehaviour
 
     void PlayerDeath()
     {
-        //Make the death UI pop up
-        Debug.Log("Alex this is UI stuff so you do this");
+        SceneManager.LoadScene("DeathScreen");
     }
+
 
     void Die()
     {
