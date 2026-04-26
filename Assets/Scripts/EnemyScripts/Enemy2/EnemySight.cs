@@ -22,7 +22,6 @@ public class EnemySight : MonoBehaviour
     {
         if (inRange && inFullView && inVisionAngle)
         {
-            Debug.Log("spotted chasing");
             return patrolStates.Chase;
         }
         return patrolStates.Patrol;

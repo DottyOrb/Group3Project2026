@@ -4,7 +4,7 @@ public class RangedEnemy : EnemyBase
 {
     [SerializeField] public GameObject projBase;
     //[SerializeField] private float projLife = 4;
-    [SerializeField] private float enemyFireRate = 2.5f;
+    //[SerializeField] private float enemyFireRate = 2.5f;
     public Transform projSpawn;
     public Transform playerTransform;
     RangedEnemy() : base() 
