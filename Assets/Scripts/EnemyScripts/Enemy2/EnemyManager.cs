@@ -1,6 +1,5 @@
 using System.Collections;
 using UnityEngine;
-using static UnityEditor.PlayerSettings;
 
 public enum patrolStates
 {
@@ -36,6 +35,16 @@ public class EnemyManager : MonoBehaviour
     
     void Update()
     {
+        if (player == null)
+        {
+            player = GameObject.FindGameObjectWithTag("Player");
+
+            if (player != null )
+            {
+                Debug.Log("we good now");
+            }
+        }
+
         if (enemy != null)
         {
             float dist = Vector3.Distance(player.transform.position, enemy.transform.position);//calculates distance between player and enemy

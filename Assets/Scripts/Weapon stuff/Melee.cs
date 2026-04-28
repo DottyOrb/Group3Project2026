@@ -16,7 +16,7 @@ public class Melee : WeaponsParentScript
     {
         base.Start();
 
-        damage = 5f;
+        damage = 20f;
         range = 5f;
         shotKnockBack = 10f;
         rateOfFire = 0.5f;

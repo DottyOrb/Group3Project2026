@@ -11,7 +11,7 @@ public class CrossBow : WeaponsParentScript
         damage = 25f;
         range = 100f;
         shotKnockBack = 0f;
-        rateOfFire = 1f;
+        rateOfFire = 0.5f;
         isFullAuto = false;
     }
 

@@ -30,6 +30,16 @@ public class EnemySight : MonoBehaviour
     // Update is called once per frame
     void Update()
     {
+        if (player == null)
+        {
+            player = GameObject.FindGameObjectWithTag("Player");
+
+            if (player != null)
+            {
+                Debug.Log("we good now");
+            }
+        }
+
         if (Vector3.Distance(transform.position, player.transform.position) <= detectionRange)
         {
             inRange = true;

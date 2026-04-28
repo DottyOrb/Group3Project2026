@@ -192,7 +192,7 @@ NavMeshAgent:
   m_Enabled: 1
   m_AgentTypeID: 0
   m_Radius: 0.49999997
-  m_Speed: 3.5
+  m_Speed: 14
   m_Acceleration: 8
   avoidancePriority: 50
   m_AngularSpeed: 120
@@ -219,7 +219,6 @@ MonoBehaviour:
   health: 100
   isPlayer: 0
   healthBar: {fileID: 6615310901123925420}
-  deathScript: {fileID: 0}
 --- !u!95 &6804260076674529146
 Animator:
   serializedVersion: 7

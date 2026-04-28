@@ -1,5 +1,6 @@
 using UnityEngine;
 using UnityEngine.SceneManagement;
+using static UnityEngine.Rendering.DebugUI;
 
 public class HP : MonoBehaviour
 {
@@ -23,8 +24,21 @@ public class HP : MonoBehaviour
     }
 
 
+    private void Update()
+    {
+        if (healthBar == null)
+        {
+            GameObject HPObj = GameObject.FindGameObjectWithTag("PlayerHealthBar");
 
-     public void Heal(float healAmount)
+            if (HPObj != null)
+            {
+                healthBar = HPObj.GetComponent<HealthBar>();
+            }
+        }
+    }
+
+
+    public void Heal(float healAmount)
     {
         if (isPlayer || CanHeal())
         {
